@@ -6,9 +6,8 @@ A full-stack team task management app with role-based access control, Kanban boa
 
 ## 🚀 Live Demo
 
-> **URL:** *(add your Railway URL here after deploy)*  
-> **Demo login:** `demo@taskflow.app` / `demo123`  
-> **Team member:** `alex@taskflow.app` / `member123`
+> **URL:** web-production-d975f.up.railway.app 
+
 
 ---
 
@@ -116,98 +115,4 @@ cd frontend && npm run dev
 
 ---
 
-## 🌐 Deploy to Railway
 
-### One-time setup
-
-1. Push this repo to GitHub
-2. Go to [railway.app](https://railway.app) → **New Project** → **Deploy from GitHub repo**
-3. Select your repo
-4. Set these **environment variables** in Railway dashboard:
-
-| Variable | Value |
-|---|---|
-| `JWT_SECRET` | any long random string |
-| `NODE_ENV` | `production` |
-| `DB_PATH` | `/data/taskflow.json` *(optional — uses Railway volume)* |
-
-5. Railway auto-detects `nixpacks.toml`, builds frontend, then starts backend
-6. Visit your Railway URL — seed data is pre-loaded
-
-### How the deployment works
-```
-Railway pulls code
-→ nixpacks.toml: cd frontend && npm install && npm run build
-→ nixpacks.toml: cd backend && npm install
-→ node backend/server.js
-   → serves /api/* routes
-   → serves frontend/dist as static files
-   → all on a single port (Railway assigns $PORT)
-```
-
----
-
-## 🔌 REST API Reference
-
-### Auth
-```
-POST /api/auth/signup     { name, email, password }
-POST /api/auth/login      { email, password }
-GET  /api/auth/me         → current user (requires token)
-PUT  /api/auth/me         { name }
-```
-
-### Projects
-```
-GET    /api/projects                     → list user's projects
-POST   /api/projects                     { name, description?, color? }
-GET    /api/projects/:id                 → project detail + members
-PUT    /api/projects/:id                 [admin] update
-DELETE /api/projects/:id                 [admin] delete
-
-GET    /api/projects/:id/members         → member list
-POST   /api/projects/:id/members         [admin] { email, role }
-PUT    /api/projects/:id/members/:userId [admin] { role }
-DELETE /api/projects/:id/members/:userId [admin] remove member
-DELETE /api/projects/:id/leave           leave project
-```
-
-### Tasks
-```
-GET    /api/projects/:id/tasks           → task list (?status=&assigneeId=&priority=)
-POST   /api/projects/:id/tasks           { title, description?, status?, priority?, dueDate?, assigneeId? }
-GET    /api/projects/:id/tasks/:taskId   → task + comments
-PUT    /api/projects/:id/tasks/:taskId   update (members: own tasks only)
-DELETE /api/projects/:id/tasks/:taskId   [admin only]
-
-POST   /api/projects/:id/tasks/:taskId/comments  { content }
-```
-
-### Dashboard
-```
-GET /api/dashboard/stats          → totalProjects, totalTasks, overdue, byStatus
-GET /api/dashboard/my-tasks       → all tasks assigned to me
-GET /api/dashboard/activity       → recent task updates across my projects
-GET /api/dashboard/users/search   ?q=name_or_email
-```
-
----
-
-## 🔒 Role-Based Access Control
-
-| Action | Admin | Member |
-|---|---|---|
-| View project & tasks | ✅ | ✅ |
-| Create tasks | ✅ | ✅ |
-| Update own tasks | ✅ | ✅ |
-| Update any task | ✅ | ❌ |
-| Delete tasks | ✅ | ❌ |
-| Invite/remove members | ✅ | ❌ |
-| Change member roles | ✅ | ❌ |
-| Delete project | ✅ | ❌ |
-
----
-
-## 📝 License
-
-MIT
