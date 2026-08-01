@@ -4,12 +4,6 @@ A full-stack team task management app with role-based access control, Kanban boa
 
 ---
 
-## 🚀 Live Demo
-
-**URL:** https://web-production-d975f.up.railway.app
-
-
----
 
 ## ✨ Features
 
